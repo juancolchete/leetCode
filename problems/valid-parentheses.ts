@@ -1,16 +1,19 @@
-let meta = {'(':[1,0], ')':[-1,0],'{':[1,1], '}':[-1,1],'[':[1,2],']':[-1,2]}
+let meta = {'(':true,'{':true,'[':true,')':'(','}':'{',']':'['}
 function isValid(s: string): boolean {
-  let parentheses = [0,0,0] 
   let valid = true
+  let parentheses:string[] = []
   for(let i=0;i<s.length;i++){
-    let metaItem = meta[s[i]]
-    parentheses[metaItem[1]] +=  metaItem[0]
-    if(parentheses[metaItem[1]] < 0){
-      valid = false
-      break
+    if(meta[s[i]] == true){
+      parentheses.push(s[i])
+    }else{
+      let lastParentheses = parentheses.pop()
+      if(meta[s[i]] != lastParentheses){
+        valid = false
+        break
+      }
     }
   }
-  if(valid == true && parentheses[0] + parentheses[1] + parentheses[1] != 0){
+  if(parentheses.length > 0){
     valid = false;
   }
   return  valid
